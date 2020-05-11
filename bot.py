@@ -2,13 +2,13 @@ import json
 import requests
 import time
 import urllib
-import config
+import os
 from dbhelper import DBHelper
 
 db = DBHelper()
 
-TOKEN = config.token
-baseUrl = config.base_url           # Added a few improvement, instead of --
+TOKEN = os.environ.get('TOKEN')
+baseUrl = os.environ.get('BASE_URL')           # Added a few improvement, instead of --
 									# URL "https://api.telegram.org/bot{}/".format(TOKEN)
 URL = baseUrl.format(TOKEN)
 
