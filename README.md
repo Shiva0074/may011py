@@ -1,2 +1,4 @@
 # may011py
-# ~1st attempt to build a telegram bot in Python
+
+# This is a Telegram bot in build using Python
+
