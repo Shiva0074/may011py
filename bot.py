@@ -39,7 +39,7 @@ def get_last_update_id(updates):
         update_ids.append(int(update["update_id"]))
     return max(update_ids)
 
-
+'''
 def handle_updates(updates):
     for update in updates["result"]:
         text = update["message"]["text"]
@@ -68,6 +68,31 @@ def handle_updates(updates):
             items = db.get_items(chat)
             message = "\n".join(items)
             send_message(message, chat)
+'''
+
+def handle_updates(updates):
+    for update in updates['result']:
+        text = update['message']['text']
+        chat_id = update['message']['chat']['id']
+        items = DB.get_items(chat_id)
+        if text == '/start':
+            send_message("Welcome to your personal To-Do list📋🧐.\n Send anything that needs to be included in the list to me \n (--Example: Bring Veggi's from Market & Tap on send) and \n I'll store 💾 it as an item.\n To remove items select  /done ", chat)
+        elif text == '/done':
+		keyboard = build_keyboard(items)
+		send_message("Select an item to delete 📝 from the below list or \n select,  /start to add ", chat, keyboard)
+        elif text == '/show':
+            send_message(chat_id, 'Here is your To-Do List:\n\n')
+            send_message(chat_id, '\n'.join(items))
+        elif text.startswith('/'):
+            continue
+        elif text in items:
+            DB.delete_item(chat_id, text)
+            items = DB.get_items(chat_id)
+            send_message(chat_id, 'Yipeee🐒, Item --"{}" marked as completed.\n Select an item to delete 📝 or /start to add the new item'.format(text))
+        else:
+            DB.add_item(chat_id, text)
+            items = DB.get_items(chat_id)
+            send_message(chat_id, 'Item "{}" Added to TODO List'.format(text))
 
 
 def get_last_chat_id_and_text(updates):
